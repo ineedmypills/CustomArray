@@ -4,6 +4,8 @@
 #include <Windows.h>
 #include <memory>
 #include <initializer_list>
+#include <algorithm>
+#include <span>
 
 class CustomArray final
 {
