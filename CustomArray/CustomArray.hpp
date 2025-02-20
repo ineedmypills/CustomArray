@@ -6,6 +6,8 @@
 #include <initializer_list>
 #include <algorithm>
 #include <span>
+#include <utility>
+#include <sstream>
 
 class CustomArray final
 {
