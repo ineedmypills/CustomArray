@@ -29,7 +29,7 @@ public:
 	explicit operator bool() const noexcept;
 
 	CustomArray& operator++();
-	CustomArray& operator++(int);
+	CustomArray operator++(int);
 	CustomArray& operator+=(int value);
 
 private:
@@ -40,7 +40,7 @@ private:
 	friend void swap(CustomArray& firstObj, CustomArray& secondObj) noexcept;
 };
 
-//std::ostream& operator<<(std::ostream out, const CustomArray& obj);
+std::ostream& operator<<(std::ostream out, const CustomArray& obj);
 
 #endif //!_CUSTOMARRAY_HPP_
 
