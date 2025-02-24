@@ -127,7 +127,13 @@ std::istream& operator>>(std::istream& in, CustomArray& obj)
 	return in;
 }
 
-std::ostream& operator<<(std::ostream out, const CustomArray& obj)
+void swap(CustomArray& firstObj, CustomArray& secondObj) noexcept
+{
+	std::swap(firstObj.arrSize, secondObj.arrSize);
+	firstObj.ptr.swap(secondObj.ptr);
+}
+
+std::ostream& operator<<(std::ostream& out, const CustomArray& obj)
 {
 	out << obj.toString();
 	return out;

@@ -40,7 +40,7 @@ private:
 	friend void swap(CustomArray& firstObj, CustomArray& secondObj) noexcept;
 };
 
-std::ostream& operator<<(std::ostream out, const CustomArray& obj);
+std::ostream& operator<<(std::ostream& out, const CustomArray& obj);
 
 #endif //!_CUSTOMARRAY_HPP_
 
