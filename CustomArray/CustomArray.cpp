@@ -1,5 +1,6 @@
 #include "CustomArray.hpp"
 
+
 CustomArray::CustomArray(size_t size)
 {
 	this->arrSize = size;
@@ -44,6 +45,37 @@ CustomArray& CustomArray::operator=(CustomArray&& rightArray) noexcept
 		this->ptr = std::move(rightArray.ptr);
 	}
 	return *this;
+}
+
+CustomArray::CustomArray(const std::string& filename) {
+	std::ifstream in(filename);
+	if (!in) {
+		throw std::runtime_error("Невозможно открыть файл: " + filename);
+	}
+
+	size_t count = 0;
+	int temp;
+	while (in >> temp) ++count;
+
+	if (!in.eof()) {
+		throw std::runtime_error("Неверные данные в файле: " + filename);
+	}
+
+	in.clear();
+	in.seekg(0);
+
+	ptr = std::make_unique<int[]>(count);
+	arrSize = count;
+	for (size_t i = 0; i < arrSize; ++i) {
+		if (!(in >> ptr[i])) {
+			throw std::runtime_error("Ошибка чтения файла: " + filename);
+		}
+	}
+
+	in >> std::ws;
+	if (!in.eof()) {
+		throw std::runtime_error("Лишние данные в файле: " + filename);
+	}
 }
 
 CustomArray::~CustomArray()
@@ -115,6 +147,57 @@ CustomArray& CustomArray::operator+=(int value)
 	const std::span<int> items{ this->ptr.get(), this->arrSize };
 	std::for_each(std::begin(items), std::end(items), [value](auto& i) {i+=value;});
 	return *this;
+}
+
+void CustomArray::saveToFile(const std::string& filename) const {
+	std::ofstream out(filename);
+	if (!out) {
+		throw std::runtime_error("Невозможно открыть файл для чтения: " + filename);
+	}
+	const std::span<const int> items{ ptr.get(), arrSize };
+	for (size_t i = 0; i < arrSize; ++i) {
+		out << items[i];
+		if (i != arrSize - 1) {
+			out << ' ';
+		}
+	}
+}
+
+void CustomArray::moveToFile(const std::string& filename) {
+	saveToFile(filename);
+	arrSize = 0;
+	ptr = std::make_unique<int[]>(0);
+}
+
+void CustomArray::loadFromFile(const std::string& filename) {
+	std::ifstream in(filename);
+	if (!in) {
+		throw std::runtime_error("Невозможно открыть файл: " + filename);
+	}
+
+	size_t count = 0;
+	int temp;
+	while (in >> temp) ++count;
+
+	if (!in.eof()) {
+		throw std::runtime_error("Неверные данные в файле: " + filename);
+	}
+
+	in.clear();
+	in.seekg(0);
+
+	ptr = std::make_unique<int[]>(count);
+	arrSize = count;
+	for (size_t i = 0; i < arrSize; ++i) {
+		if (!(in >> ptr[i])) {
+			throw std::runtime_error("Ошибка чтения файла: " + filename);
+		}
+	}
+
+	in >> std::ws;
+	if (!in.eof()) {
+		throw std::runtime_error("Лишние данные в файле: " + filename);
+	}
 }
 
 std::istream& operator>>(std::istream& in, CustomArray& obj)
